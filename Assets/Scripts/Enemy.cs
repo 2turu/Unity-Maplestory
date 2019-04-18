@@ -10,13 +10,21 @@ public class Enemy : MonoBehaviour
     public float startDazedTime;
 
     private Animator anim;
-    public GameObject bloodEffect;
+    //public GameObject bloodEffect;
+    private Rigidbody2D m_Rigidbody2D;
+
+    public Animator enemyAnim;
+
+    private void Awake()
+    {
+        m_Rigidbody2D = GetComponent<Rigidbody2D>();
+    }
 
     // Start is called before the first frame update
     void Start()
     {
         anim = GetComponent<Animator>();
-        anim.SetBool("isRunning", true);
+        //anim.SetBool("isRunning", true);
     }
 
     // Update is called once per frame
@@ -24,7 +32,7 @@ public class Enemy : MonoBehaviour
     {
         if(dazedTime <= 0)
         {
-            speed = 5;
+            speed = 2;
         }
         else
         {
@@ -37,6 +45,7 @@ public class Enemy : MonoBehaviour
             Destroy(gameObject);
         }
         transform.Translate(Vector2.left * speed * Time.deltaTime);
+       
     }
 
     public void TakeDamage(int damage)
@@ -44,6 +53,9 @@ public class Enemy : MonoBehaviour
         dazedTime = startDazedTime;
         //Instantiate(bloodEffect, transform.position, Quaternion.identity);
         health -= damage;
-        Debug.Log("damage Taken !");
+        //Debug.Log("damage Taken !");
+        enemyAnim.SetTrigger("hit");
+        m_Rigidbody2D.AddForce(new Vector2(7000f, 0));
+
     }
 }

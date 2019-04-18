@@ -10,20 +10,22 @@ public class PlayerMovement : MonoBehaviour
     [Header("Player Movement")]
     public CharacterController2D controller;
     public Animator animator;
-    public float runSpeed = 40f;
-    float horizontalMove = 0;
-    bool jump = false; //default not jumping
-    bool crouch = false;
+    
+    private float horizontalMove = 0;
+    private bool jump = false; //default not jumping
+    private bool crouch = false;
+
+    [SerializeField] private float runSpeed = 30f;
     private bool lockMovement = false; //don't move when doing animation
 
     [Header("Player Attack")]
-    
-    public float startTimeBtwAttack;
+
+    [SerializeField] private float startTimeBtwAttack = 0.6f;
     public Transform attackPos;
     public LayerMask whatIsEnemies;
     //public Animator camAnim;
     public Animator playerAnim;
-    public float attackRange;
+    [SerializeField] private float attackRange = 2f;
     //public float attackRangeX; //for if you want rectangular hitbox
     //public float attackRangeY; //for if you want rectangular hitbox
     public int damage;
@@ -47,12 +49,13 @@ public class PlayerMovement : MonoBehaviour
         if (!gameManager.chatBox.isFocused)
         {
             //PLAYER ATTACK
-            Debug.Log(timeBtwAttack);
+            //Debug.Log(timeBtwAttack);
             if (timeBtwAttack <= 0)
             {
                 lockMovement = false; //allowed to move after delay
                 if (Input.GetKey(KeyCode.Z))
                 {
+                    
                     //horizontal speed control on attack
                     lockMovement = true; //stop moving to attack
                     if (playerAnim.GetBool("IsJumping"))
@@ -63,20 +66,18 @@ public class PlayerMovement : MonoBehaviour
                     {
                         horizontalMove = 0;
                     }
-
                     //camAnim.SetTrigger("shake");
                     playerAnim.SetTrigger("Attack");
-                    Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange);
+
+                    Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsEnemies);
                     //IF WANT RECTANGULAR USE: OverlapBoxAll(attack.position, new Vector2(attackRangeX, attackRangeY), 0); //change 0 for angle
-                    /*
                     for (int i = 0; i < enemiesToDamage.Length; i++)
                     {
                         enemiesToDamage[i].GetComponent<Enemy>().TakeDamage(damage);
                     }
-                    */
                     timeBtwAttack = startTimeBtwAttack;
+                    
                 }
-
             }
             else
             {

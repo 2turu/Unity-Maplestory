@@ -5,9 +5,10 @@ using UnityEngine;
 public class CameraFollow : MonoBehaviour
 {
     private Vector2 velocity;
-    public float smoothTimeY;
-    public float smoothTimeX;
-    public float moveCameraY;
+    [SerializeField] private float smoothTimeY = 0;
+    [SerializeField] private float smoothTimeX = 0;
+    [SerializeField] private float moveCameraY = 0;
+    [SerializeField] private float moveCameraX = 0;
 
     public GameObject player;
 
@@ -27,7 +28,7 @@ public class CameraFollow : MonoBehaviour
 
     void FixedUpdate()
     {
-        float posX = Mathf.SmoothDamp(transform.position.x, player.transform.position.x, ref velocity.x, smoothTimeX);
+        float posX = Mathf.SmoothDamp(transform.position.x, player.transform.position.x - moveCameraX, ref velocity.x, smoothTimeX);
         float posY = Mathf.SmoothDamp(transform.position.y - moveCameraY, player.transform.position.y - moveCameraY, ref velocity.y, smoothTimeY);
 
         transform.position = new Vector3(posX, posY, transform.position.z);
