@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [Header("Game Manager")]
+    [Header("General")]
     public GameManager gameManager;
+    public float health;
 
     [Header("Player Movement")]
     public CharacterController2D controller;

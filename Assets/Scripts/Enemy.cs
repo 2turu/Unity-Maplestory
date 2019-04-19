@@ -5,15 +5,17 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public int health;
-    public float speed;
+    [SerializeField] private float speed;
     private float dazedTime;
     public float startDazedTime;
+    [SerializeField] private float knockbackX = 0;
+    [SerializeField] private float deathTime = 0;
 
     private Animator anim;
-    //public GameObject bloodEffect;
     private Rigidbody2D m_Rigidbody2D;
 
     public Animator enemyAnim;
+
 
     private void Awake()
     {
@@ -40,12 +42,9 @@ public class Enemy : MonoBehaviour
             dazedTime -= Time.deltaTime;
         }
 
-        if(health <= 0)
-        {
-            Destroy(gameObject);
-        }
+
+        //move
         transform.Translate(Vector2.left * speed * Time.deltaTime);
-       
     }
 
     public void TakeDamage(int damage)
@@ -55,7 +54,16 @@ public class Enemy : MonoBehaviour
         health -= damage;
         //Debug.Log("damage Taken !");
         enemyAnim.SetTrigger("hit");
-        m_Rigidbody2D.AddForce(new Vector2(7000f, 0));
+        m_Rigidbody2D.AddForce(new Vector2(knockbackX, 0));
+        if (health <= 0)
+        {
+            enemyAnim.SetTrigger("death");
+        }
 
+    }
+    
+    public void Die()
+    {
+        Destroy(gameObject);
     }
 }
