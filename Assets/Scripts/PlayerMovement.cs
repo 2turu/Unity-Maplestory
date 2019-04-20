@@ -16,7 +16,7 @@ public class PlayerMovement : MonoBehaviour
     private bool jump = false; //default not jumping
     private bool crouch = false;
 
-    [SerializeField] private float runSpeed = 30f;
+    [SerializeField] private readonly float runSpeed = 30f;
     private bool lockMovement = false; //don't move when doing animation
 
     [Header("Player Attack")]

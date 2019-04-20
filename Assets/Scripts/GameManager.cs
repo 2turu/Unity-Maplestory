@@ -84,10 +84,11 @@ public class GameManager : MonoBehaviour
         }
 
         //new message object
-        Message newMessage = new Message();
-
-        //set text to input text
-        newMessage.text = text;
+        Message newMessage = new Message
+        {
+            //set text to input text
+            text = text
+        };
 
         //create text formatting
         GameObject newText = Instantiate(textObject, chatPanel.transform);

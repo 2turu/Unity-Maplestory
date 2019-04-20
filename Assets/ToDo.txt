@@ -1,4 +1,24 @@
 
+[To Add]
+Player Health Mechanics
+UI Element: Health Bar: Player[4] 
+Add Player Death
+Character Select
+Multiple Controller Support: https://www.reddit.com/r/Unity3D/comments/9321km/multiple_controllers_connected_to_one_pc/ 
+							 https://github.com/pbhogan/InControl
+Each Player has their own camera: https://forum.unity.com/threads/how-do-i-give-each-player-their-own-camera.63708/
+Online Multiplayer: https://www.reddit.com/r/Unity3D/comments/8he04r/peer_2_peer_multiplayer/
+					https://stackoverflow.com/questions/36091976/can-i-use-the-unity-networking-hlapi-without-paying-for-the-unity-multiplayer-se
 
-Refactor code to use [Serializable] on private but Inspector usable
-Add Character Dead Animations
+[Code]
+Refactor code to use [SerializableField] private
+Refactor code to organize Inspector such as headers
+Move attack to character controller
+
+[Bugs]
+Enemy Death animation loops if triggered by attacking again.
+Improve Unity Run Time
+Fix Health Bar
+
+[Finished]
+UI Element: Health Bar: Enemy

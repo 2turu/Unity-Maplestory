@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public int health;
+    public float currentHealth;
+    public float maxHealth;
     [SerializeField] private float speed;
     private float dazedTime;
     public float startDazedTime;
     [SerializeField] private float knockbackX = 0;
-    [SerializeField] private float deathTime = 0;
 
     private Animator anim;
     private Rigidbody2D m_Rigidbody2D;
@@ -51,11 +51,11 @@ public class Enemy : MonoBehaviour
     {
         dazedTime = startDazedTime;
         //Instantiate(bloodEffect, transform.position, Quaternion.identity);
-        health -= damage;
+        currentHealth -= damage;
         //Debug.Log("damage Taken !");
         enemyAnim.SetTrigger("hit");
         m_Rigidbody2D.AddForce(new Vector2(knockbackX, 0));
-        if (health <= 0)
+        if (currentHealth <= 0)
         {
             enemyAnim.SetTrigger("death");
         }
