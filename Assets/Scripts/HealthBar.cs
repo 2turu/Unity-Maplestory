@@ -22,9 +22,13 @@ public class HealthBar : MonoBehaviour
 
     public void SetSize(float percentHealth)
     {
-        if(percentHealth > 0)
+        if(percentHealth >= 0)
         {
             bar.localScale = new Vector3(percentHealth, 1f, 1f);
+        }
+        else
+        {
+            bar.localScale = new Vector3(0f, 1f, 1f);
         }
     }
 }

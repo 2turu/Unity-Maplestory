@@ -18,7 +18,6 @@ Move attack to character controller
 [Bugs]
 Enemy Death animation loops if triggered by attacking again.
 Improve Unity Run Time
-Fix Health Bar
 
 [Finished]
 UI Element: Health Bar: Enemy
