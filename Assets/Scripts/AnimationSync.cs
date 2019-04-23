@@ -21,7 +21,7 @@ public class AnimationSync : MonoBehaviour {
             var horizontal = Input.GetAxis("Horizontal");
 
             //set the "IsMoving" variable on the world & view model
-            if (horizontal != 0) {
+            if (horizontal != 0 && player.m_Grounded) {
                 if (animator.gameObject.activeInHierarchy) {
                     animator.SetFloat("Speed", 30f);
                     //set the view model
@@ -41,7 +41,7 @@ public class AnimationSync : MonoBehaviour {
                     animator.SetBool("isJumping", true);
                 }
                 np.networkObject.isJumping = true;
-            } else {
+            } else if (!player.m_Grounded) {
                 if (animator.gameObject.activeInHierarchy) {
                     animator.SetBool("isJumping", false);
                 }

@@ -7,6 +7,7 @@
 public class PlayerController : MonoBehaviour {
     [Header("Physics and Hitboxes")]
     [Space]
+    private NetworkedPlayer np;
     [SerializeField] private float m_JumpForce = 400f;                          // Amount of force added when the player jumps.
     [Range(0, 1)] [SerializeField] private float m_CrouchSpeed = .60f;          // Amount of maxSpeed applied to crouching movement. 1 = 100%
     [Range(0, .3f)] [SerializeField] private float m_MovementSmoothing = .05f;  // How much to smooth out the movement
