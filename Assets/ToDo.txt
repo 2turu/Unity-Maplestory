@@ -6,18 +6,21 @@ Add Player Death
 Character Select
 Multiple Controller Support: https://www.reddit.com/r/Unity3D/comments/9321km/multiple_controllers_connected_to_one_pc/ 
 							 https://github.com/pbhogan/InControl
-Each Player has their own camera: https://forum.unity.com/threads/how-do-i-give-each-player-their-own-camera.63708/
-Online Multiplayer: https://www.reddit.com/r/Unity3D/comments/8he04r/peer_2_peer_multiplayer/
-					https://stackoverflow.com/questions/36091976/can-i-use-the-unity-networking-hlapi-without-paying-for-the-unity-multiplayer-se
-
-[Code]
-Refactor code to use [SerializableField] private
-Refactor code to organize Inspector such as headers
-Move attack to character controller
 
 [Bugs]
 Enemy Death animation loops if triggered by attacking again.
 Improve Unity Run Time
 
+[Currently]
+Sync Animations across clients.
+
 [Finished]
+4/22/19
+Each Player has their own camera
+Added forge networking to the game
+CharacterController -> PlayerController
+Move PlayerMovement.cs all into CharacterController
+Move attack to character controller
+4/20/19
 UI Element: Health Bar: Enemy
+Change player lower collision hitbox from rectangle to circle
