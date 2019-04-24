@@ -400,6 +400,9 @@ MonoBehaviour:
   animator: {fileID: 3130932843161603539}
   runSpeed: 30
   m_JumpAttackSpeed: 0.8
+  horizontalMove: 0
+  crouch: 0
+  jump: 0
   startTimeBtwAttack: 0.35
   attackRange: 2
   maxHealth: 100

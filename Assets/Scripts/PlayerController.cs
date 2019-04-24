@@ -28,10 +28,10 @@ public class PlayerController : MonoBehaviour {
     [Space]
     [SerializeField] private float runSpeed = 30f;
     [Range(0, 1)] [SerializeField] private float m_JumpAttackSpeed = .80f;      //movement speed multiplier for when jump attack
-    private float horizontalMove = 0;
-    private bool crouch = false;
+    public float horizontalMove = 0;
+    public bool crouch = false;
     private bool lockMovement = false;                                          //don't move when doing animation
-    private bool jump = false;
+    public bool jump = false;
 
     [Header("Attack")]
     [Space]
@@ -51,19 +51,29 @@ public class PlayerController : MonoBehaviour {
     }
     //Physics Updates
     private void FixedUpdate() {
-        bool wasGrounded = m_Grounded;
-        m_Grounded = false;
 
-        // The player is grounded if a circlecast to the groundcheck position hits anything designated as ground
-        // This can be done using layers instead but Sample Assets will not overwrite your project settings.
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(m_GroundCheck.position, k_GroundedRadius, m_WhatIsGround);
-        for (int i = 0; i < colliders.Length; i++) {
-            if (colliders[i].gameObject != gameObject) {
-                m_Grounded = true;
-                if (!wasGrounded && m_Rigidbody2D.velocity.y < 0)
-                    animator.SetBool("IsJumping", false);
+            //bool wasGrounded = m_Grounded;
+            //m_Grounded = false;
+            /*
+            // The player is grounded if a circlecast to the groundcheck position hits anything designated as ground
+            // This can be done using layers instead but Sample Assets will not overwrite your project settings.
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(m_GroundCheck.position, k_GroundedRadius, m_WhatIsGround);
+            for (int i = 0; i < colliders.Length; i++) {
+                if (colliders[i].gameObject != gameObject) {
+                    m_Grounded = true;
+                    if (!wasGrounded && m_Rigidbody2D.velocity.y < 0)
+                        animator.SetBool("IsJumping", false);
+                }
             }
-        }
+            */
+
+            m_Grounded = Physics2D.OverlapArea(new Vector2(transform.position.x - 1.2f, transform.position.y - 1.2f), 
+                                           new Vector2(transform.position.x + 1.2f, transform.position.y - 1.21f), 
+                                           m_WhatIsGround);
+
+        if (m_Grounded && m_Rigidbody2D.velocity.y < 0)
+            animator.SetBool("IsJumping", false);
+
         //MOVEMENT
         if (m_Grounded || m_AirControl) {
             float move = horizontalMove * Time.fixedDeltaTime;
@@ -89,6 +99,9 @@ public class PlayerController : MonoBehaviour {
     }
 
     void Update() {
+        if(!np.networkObject.IsOwner) {
+
+        }
         //ATTACK
         if (timeBtwAttack <= 0 && !animator.GetBool("IsCrouching")) {
             lockMovement = false; //allowed to move after delay
@@ -135,6 +148,7 @@ public class PlayerController : MonoBehaviour {
         if (Input.GetButtonDown("Crouch") && m_Grounded) {
             //animator.SetBool("IsJumping", false);
             animator.SetBool("IsCrouching", true);
+            lockMovement = true;
         } else if (Input.GetButtonUp("Crouch")) {
             animator.SetBool("IsCrouching", false);
         }
@@ -153,5 +167,10 @@ public class PlayerController : MonoBehaviour {
     void OnDrawGizmosSelected() {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(attackPos.position, attackRange);
+    }
+    void OnDrawGizmos() {
+        Gizmos.color = new Color(0, 1, 0, 0.5f);
+        Gizmos.DrawCube(new Vector2(transform.position.x, transform.position.y - 1.2f),
+            new Vector2(1, 0.01f));
     }
 }

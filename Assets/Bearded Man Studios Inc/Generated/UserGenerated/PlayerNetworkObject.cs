@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace BeardedManStudios.Forge.Networking.Generated
 {
-	[GeneratedInterpol("{\"inter\":[0.15,0.15,0,0]")]
+	[GeneratedInterpol("{\"inter\":[0.15,0,0,0,0]")]
 	public partial class PlayerNetworkObject : NetworkObject
 	{
 		public const int IDENTITY = 9;
@@ -49,7 +49,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 		[ForgeGeneratedField]
 		private float _Speed;
 		public event FieldEvent<float> SpeedChanged;
-		public InterpolateFloat SpeedInterpolation = new InterpolateFloat() { LerpT = 0.15f, Enabled = true };
+		public InterpolateFloat SpeedInterpolation = new InterpolateFloat() { LerpT = 0f, Enabled = false };
 		public float Speed
 		{
 			get { return _Speed; }
@@ -139,6 +139,37 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			if (isCrouchingChanged != null) isCrouchingChanged(_isCrouching, timestep);
 			if (fieldAltered != null) fieldAltered("isCrouching", _isCrouching, timestep);
 		}
+		[ForgeGeneratedField]
+		private bool _isGrounded;
+		public event FieldEvent<bool> isGroundedChanged;
+		public Interpolated<bool> isGroundedInterpolation = new Interpolated<bool>() { LerpT = 0f, Enabled = false };
+		public bool isGrounded
+		{
+			get { return _isGrounded; }
+			set
+			{
+				// Don't do anything if the value is the same
+				if (_isGrounded == value)
+					return;
+
+				// Mark the field as dirty for the network to transmit
+				_dirtyFields[0] |= 0x10;
+				_isGrounded = value;
+				hasDirtyFields = true;
+			}
+		}
+
+		public void SetisGroundedDirty()
+		{
+			_dirtyFields[0] |= 0x10;
+			hasDirtyFields = true;
+		}
+
+		private void RunChange_isGrounded(ulong timestep)
+		{
+			if (isGroundedChanged != null) isGroundedChanged(_isGrounded, timestep);
+			if (fieldAltered != null) fieldAltered("isGrounded", _isGrounded, timestep);
+		}
 
 		protected override void OwnershipChanged()
 		{
@@ -152,6 +183,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			SpeedInterpolation.current = SpeedInterpolation.target;
 			isJumpingInterpolation.current = isJumpingInterpolation.target;
 			isCrouchingInterpolation.current = isCrouchingInterpolation.target;
+			isGroundedInterpolation.current = isGroundedInterpolation.target;
 		}
 
 		public override int UniqueIdentity { get { return IDENTITY; } }
@@ -162,6 +194,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			UnityObjectMapper.Instance.MapBytes(data, _Speed);
 			UnityObjectMapper.Instance.MapBytes(data, _isJumping);
 			UnityObjectMapper.Instance.MapBytes(data, _isCrouching);
+			UnityObjectMapper.Instance.MapBytes(data, _isGrounded);
 
 			return data;
 		}
@@ -184,6 +217,10 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			isCrouchingInterpolation.current = _isCrouching;
 			isCrouchingInterpolation.target = _isCrouching;
 			RunChange_isCrouching(timestep);
+			_isGrounded = UnityObjectMapper.Instance.Map<bool>(payload);
+			isGroundedInterpolation.current = _isGrounded;
+			isGroundedInterpolation.target = _isGrounded;
+			RunChange_isGrounded(timestep);
 		}
 
 		protected override BMSByte SerializeDirtyFields()
@@ -199,6 +236,8 @@ namespace BeardedManStudios.Forge.Networking.Generated
 				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _isJumping);
 			if ((0x8 & _dirtyFields[0]) != 0)
 				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _isCrouching);
+			if ((0x10 & _dirtyFields[0]) != 0)
+				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _isGrounded);
 
 			// Reset all the dirty fields
 			for (int i = 0; i < _dirtyFields.Length; i++)
@@ -267,6 +306,19 @@ namespace BeardedManStudios.Forge.Networking.Generated
 					RunChange_isCrouching(timestep);
 				}
 			}
+			if ((0x10 & readDirtyFlags[0]) != 0)
+			{
+				if (isGroundedInterpolation.Enabled)
+				{
+					isGroundedInterpolation.target = UnityObjectMapper.Instance.Map<bool>(data);
+					isGroundedInterpolation.Timestep = timestep;
+				}
+				else
+				{
+					_isGrounded = UnityObjectMapper.Instance.Map<bool>(data);
+					RunChange_isGrounded(timestep);
+				}
+			}
 		}
 
 		public override void InterpolateUpdate()
@@ -293,6 +345,11 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			{
 				_isCrouching = (bool)isCrouchingInterpolation.Interpolate();
 				//RunChange_isCrouching(isCrouchingInterpolation.Timestep);
+			}
+			if (isGroundedInterpolation.Enabled && !isGroundedInterpolation.current.UnityNear(isGroundedInterpolation.target, 0.0015f))
+			{
+				_isGrounded = (bool)isGroundedInterpolation.Interpolate();
+				//RunChange_isGrounded(isGroundedInterpolation.Timestep);
 			}
 		}
 
