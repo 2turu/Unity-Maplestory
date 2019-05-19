@@ -36,4 +36,14 @@ sysinfo.txt
 *.unitypackage
 
 # Other
-Assets/
+Assets/Animation
+Assets/Bearded Man Studios Inc
+Assets/Logs
+Assets/Map Making
+Assets/Prefabs
+Assets/References
+Assets/Scenes
+Assets/Sprites
+Assets/Standard Assets
+Assets/UI
+*.meta
