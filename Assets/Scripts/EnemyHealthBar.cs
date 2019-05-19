@@ -3,18 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyHealthBar : MonoBehaviour {
-    GameObject enemyObject;
-    Enemy enemyScript;
-
+    public GameObject enemyObject;
+    EnemyController enemyScript;
     public RectTransform bar;
-    // Start is called before the first frame update
+
+    //store health values
+    float currentHealth;
+    float maxHealth;
+
     void Start() {
-        enemyObject = GameObject.Find("Papulatus");
-        enemyScript = enemyObject.GetComponent<Enemy>();
+        enemyScript = enemyObject.GetComponent<EnemyController>();
+        maxHealth = enemyScript.getMaxHealth(); //get max health once
     }
 
     void Update() {
-        SetSize(enemyScript.currentHealth / enemyScript.maxHealth);
+        currentHealth = enemyScript.getCurrentHealth(); //make sure current health is updated
+        SetSize(currentHealth / maxHealth);
     }
 
     public void SetSize(float percentHealth) {

@@ -20,9 +20,8 @@ public class NetworkedPlayer : PlayerBehavior
     //also make an event for the network start as some components need that as well
     public event System.Action NetworkStartEvent;
 
-    //the player model
-    [SerializeField]
-    private GameObject playerModel;
+    //the player
+    PlayerController player;
 
     //Use the toggle event class
     //See the inspector for this
@@ -31,22 +30,29 @@ public class NetworkedPlayer : PlayerBehavior
 
     //the player's HUD canvas
     [SerializeField]
-    private GameObject HUD;
+    //private GameObject HUD;
 
     //The player's camera
-    private Camera playerCamera;
+    //private Camera playerCamera;
 
+    /*
     public GameObject Sani {
         get {
             return Sani;
         }
     }
+    */
+    /*
     public Camera PlayerCamera {
         get {
             return playerCamera;
         }
     }
+    */
 
+    private void Start() {
+        player = gameObject.GetComponent(typeof(PlayerController)) as PlayerController;
+    }
 
     /// <summary>
     /// Called when the network object is ready and initialized
@@ -59,12 +65,12 @@ public class NetworkedPlayer : PlayerBehavior
         ownerScripts.Invoke(networkObject.IsOwner);
 
         //Get the player camera
-        playerCamera = GetComponentInChildren<Camera>();
+        //playerCamera = GetComponentInChildren<Camera>();
 
 
         //Disable the camera if we aren't the owner
         if (!networkObject.IsOwner) {
-            playerCamera.gameObject.SetActive(false);
+            //playerCamera.gameObject.SetActive(false);
         } else if (networkObject.IsOwner) {
             //Enable the HUD if we are the owner (it's disabled in the prefab)
             //HUD.SetActive(true);
@@ -108,25 +114,22 @@ public class NetworkedPlayer : PlayerBehavior
     // Update is called once per frame
     void FixedUpdate() {
         if (networkObject.IsOwner) {
+
             //set the position
             networkObject.position = transform.position;
-            //networkObject.rotation = playerModel.transform.rotation;
+            networkObject.fire1 = player.keyFire1;
+            networkObject.horizontal = player.keyHorizontal;
+            networkObject.jump = player.keyJump;
+            networkObject.crouch = player.keyCrouch;
 
-            //Playercamera is not found the first few frames, as networkStart is a little slow
-            if (playerCamera) {
-                //set the spine to the camera's rotation on one axis
-                //spine.transform.localEulerAngles = new Vector3(spine.transform.localEulerAngles.x, playerCamera.transform.eulerAngles.x, spine.transform.localEulerAngles.z);
-                //sync it over the NCW fields
-                //networkObject.spineRotation = spine.transform.localEulerAngles;
-            }
         } else //non owner, meaning a remote player
           {
             //receive all NCW fields and use them
             transform.position = networkObject.position;
-            //playerModel.transform.rotation = networkObject.rotation;
-            //if (spine) {
-            //    spine.transform.localEulerAngles = networkObject.spineRotation;
-            //}
+            player.keyFire1 = networkObject.fire1;
+            player.keyHorizontal = networkObject.horizontal;
+            player.keyJump = networkObject.jump;
+            player.keyCrouch = networkObject.crouch;
         }
 
     }

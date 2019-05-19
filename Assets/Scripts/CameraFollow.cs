@@ -13,11 +13,11 @@ public class CameraFollow : MonoBehaviour
     public GameObject player;
 
     // Start is called before the first frame update
-    void Start() {
+    private void Start() {
         player = GameObject.FindGameObjectWithTag("Player");
     }
 
-    void FixedUpdate() {
+    private void FixedUpdate() {
         float posX = Mathf.SmoothDamp(transform.position.x, player.transform.position.x - moveCameraX, ref velocity.x, smoothTimeX);
         float posY = Mathf.SmoothDamp(transform.position.y - moveCameraY, player.transform.position.y - moveCameraY, ref velocity.y, smoothTimeY);
 

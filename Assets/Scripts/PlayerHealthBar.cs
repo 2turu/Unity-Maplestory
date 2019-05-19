@@ -12,7 +12,7 @@ public class PlayerHealthBar : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start() {
-        playerObject = GameObject.Find("Sani");
+        playerObject = GameObject.FindGameObjectWithTag("Player");
         playerScript = playerObject.GetComponent<PlayerController>();
     }
 

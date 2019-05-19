@@ -65,7 +65,7 @@ public class PlayerMovementBackup : MonoBehaviour {
                 Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsEnemies);
                 //IF WANT RECTANGULAR USE: OverlapBoxAll(attack.position, new Vector2(attackRangeX, attackRangeY), 0); //change 0 for angle
                 for (int i = 0; i < enemiesToDamage.Length; i++) {
-                    enemiesToDamage[i].GetComponent<Enemy>().TakeDamage(damage);
+                    enemiesToDamage[i].GetComponent<EnemyController>().TakeDamage(damage);
                 }
                 timeBtwAttack = startTimeBtwAttack;
             }
